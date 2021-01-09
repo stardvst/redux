@@ -1,25 +1,37 @@
-import { nanoid } from "@reduxjs/toolkit";
 import React, { useState } from "react";
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { postAdded } from "./postsSlice";
 
 export const AddPostForm = () => {
   const [title, setTitle] = useState("");
   const [content, setContent] = useState("");
+  const [userId, setUserId] = useState("");
 
   const dispatch = useDispatch();
 
+  const users = useSelector((state) => state.users);
+
   const onTitleChanged = (e) => setTitle(e.target.value);
   const onContentChanged = (e) => setContent(e.target.value);
+  const onAuthorChanged = (e) => setUserId(e.target.value);
 
   const onSubmitPost = (e) => {
     e.preventDefault();
-    if (title && content) {
-      dispatch(postAdded(title, content));
+    if (canSave) {
+      dispatch(postAdded(title, content, userId));
       setTitle("");
       setContent("");
+      setUserId("");
     }
   };
+
+  const usersOptions = users.map((user) => (
+    <option key={user.id} value={user.id}>
+      {user.name}
+    </option>
+  ));
+
+  const canSave = Boolean(title) && Boolean(content) && Boolean(userId);
 
   return (
     <section>
@@ -33,6 +45,16 @@ export const AddPostForm = () => {
           value={title}
           onChange={onTitleChanged}
         />
+        <label htmlFor="postAuthor">Author:</label>
+        <select
+          name="postAuthor"
+          id="postAuthor"
+          value={userId}
+          onChange={onAuthorChanged}
+        >
+          <option value=""></option>
+          {usersOptions}
+        </select>
         <label htmlFor="postTitle">Content:</label>
         <textarea
           name="postTitle"
@@ -42,7 +64,9 @@ export const AddPostForm = () => {
           value={content}
           onChange={onContentChanged}
         ></textarea>
-        <button type="submit">Save Post</button>
+        <button type="submit" disabled={!canSave}>
+          Save Post
+        </button>
       </form>
     </section>
   );
