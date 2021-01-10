@@ -6,6 +6,23 @@ import { fetchPosts, selectAllPosts } from "./postsSlice";
 import { ReactionButtons } from "./ReactionButtons";
 import { TimeAgo } from "./TimeAgo";
 
+let PostExcerpt = ({ post }) => {
+  return (
+    <article className="post-excerpt" key={post.id}>
+      <h3>{post.title}</h3>
+      <PostAuthor userId={post.user} />
+      <TimeAgo timestamp={post.date} />
+      <p className="post-content">{post.content.substring(0, 100)}</p>
+      <ReactionButtons post={post} />
+      <Link to={`/posts/${post.id}`} className="button muted-button">
+        View Post
+      </Link>
+    </article>
+  );
+};
+
+PostExcerpt = React.memo(PostExcerpt);
+
 export const PostList = () => {
   const dispatch = useDispatch();
   const posts = useSelector(selectAllPosts);
@@ -28,16 +45,7 @@ export const PostList = () => {
       .slice()
       .sort((a, b) => b.date.localeCompare(a.date));
     content = orderedPosts.map((post) => (
-      <article className="post-excerpt" key={post.id}>
-        <h3>{post.title}</h3>
-        <PostAuthor userId={post.user} />
-        <TimeAgo timestamp={post.date} />
-        <p className="post-content">{post.content.substring(0, 100)}</p>
-        <ReactionButtons post={post} />
-        <Link to={`/posts/${post.id}`} className="button muted-button">
-          View Post
-        </Link>
-      </article>
+      <PostExcerpt key={post.id} post={post} />
     ));
   } else if (postStatus === "error") {
     content = <div>{error}</div>;
