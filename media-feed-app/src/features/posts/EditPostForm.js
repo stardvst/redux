@@ -1,14 +1,12 @@
 import React, { useState } from "react";
 import { useSelector, useDispatch } from "react-redux";
 import { useHistory } from "react-router-dom";
-import { postUpdated } from "./postsSlice";
+import { postUpdated, selectPostById } from "./postsSlice";
 
 export const EditPostForm = ({ match }) => {
   const { postId } = match.params;
 
-  const post = useSelector((state) =>
-    state.posts.find((post) => post.id === postId)
-  );
+  const post = useSelector((state) => selectPostById(state, postId));
 
   const [title, setTitle] = useState(post.title);
   const [content, setContent] = useState(post.content);
@@ -29,7 +27,7 @@ export const EditPostForm = ({ match }) => {
 
   return (
     <section>
-      <h2></h2>
+      <h2>Edit the post</h2>
       <form action="" onSubmit={onUpdatePost}>
         <label htmlFor="">Post Title:</label>
         <input
