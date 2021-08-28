@@ -1,5 +1,10 @@
 import configureAppStore from './store/configureStore';
-import { bugAdded, bugRemoved, bugResolved } from './store/bugs';
+import {
+  bugAdded,
+  bugRemoved,
+  bugResolved,
+  getUnresolvedBugs,
+} from './store/bugs';
 import { projectAdded } from './store/projects';
 
 const store = configureAppStore();
@@ -16,4 +21,5 @@ store.dispatch(bugAdded({ description: 'Bug3' }));
 // unsubscribe();
 store.dispatch(bugResolved({ id: 1 }));
 store.dispatch(bugRemoved({ id: 1 }));
-console.log(store.getState());
+
+console.log(getUnresolvedBugs(store.getState()));
