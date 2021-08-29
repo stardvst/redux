@@ -1,11 +1,13 @@
-import { configureStore, } from '@reduxjs/toolkit';
+import { configureStore } from '@reduxjs/toolkit';
 import logger from './middleware/logger';
+import errorHandler from './middleware/errorHandler';
 // import func from './middleware/func';
 import reducer from './reducer';
 
 export default function configureAppStore() {
   return configureStore({
     reducer, // root reducer
-    middleware: getDefaultMiddleware => getDefaultMiddleware().concat(logger),
+    middleware: getDefaultMiddleware =>
+      getDefaultMiddleware().concat(logger('console')).concat(errorHandler),
   });
 }

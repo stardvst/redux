@@ -22,6 +22,11 @@ store.dispatch((dispatch, getState) => {
   console.log('State:', getState());
 });
 
+store.dispatch({
+  type: 'error',
+  payload: { message: 'An error occured.' },
+});
+
 // store.dispatch(userAdded({ name: 'User1' }));
 // store.dispatch(userAdded({ name: 'User2' }));
 
