@@ -9,6 +9,7 @@ import {
 } from './store/bugs';
 import { projectAdded } from './store/projects';
 import { userAdded } from './store/user';
+import * as actions from './store/api';
 
 const store = configureAppStore();
 
@@ -26,6 +27,15 @@ store.dispatch({
   type: 'error',
   payload: { message: 'An error occured.' },
 });
+
+store.dispatch(
+  actions.apiCallBegan({
+    url: '/bugs',
+    method: 'get',
+    data: {},
+    onSuccess: 'bugsReceived',
+  })
+);
 
 // store.dispatch(userAdded({ name: 'User1' }));
 // store.dispatch(userAdded({ name: 'User2' }));
