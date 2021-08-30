@@ -20,6 +20,7 @@ store.dispatch({
 });
 
 store.dispatch(loadBugs());
+setTimeout(() => store.dispatch(loadBugs()), 2000);
 
 // store.dispatch(userAdded({ name: 'User1' }));
 // store.dispatch(userAdded({ name: 'User2' }));
