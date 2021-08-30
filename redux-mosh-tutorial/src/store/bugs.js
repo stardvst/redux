@@ -35,14 +35,30 @@ const slice = createSlice({
     },
 
     bugsReceived: (bugs, action) => {
+      bugs.loading = false;
       bugs.list = action.payload;
+    },
+
+    bugsRequested: (bugs, action) => {
+      bugs.loading = true;
+    },
+
+    bugsRequestFailed: (bugs, action) => {
+      bugs.loading = false;
     },
   },
 });
 
 export default slice.reducer;
-export const { bugAdded, bugResolved, bugRemoved, bugAssigned, bugsReceived } =
-  slice.actions;
+export const {
+  bugAdded,
+  bugResolved,
+  bugRemoved,
+  bugAssigned,
+  bugsReceived,
+  bugsRequested,
+  bugsRequestFailed,
+} = slice.actions;
 
 // action creators
 const url = '/bugs';
@@ -51,7 +67,9 @@ export const loadBugs = () =>
     url,
     method: 'get',
     data: {},
+    onStart: bugsRequested.type,
     onSuccess: bugsReceived.type,
+    onError: bugsRequestFailed.type,
   });
 
 export const getUnresolvedBugs = createSelector(

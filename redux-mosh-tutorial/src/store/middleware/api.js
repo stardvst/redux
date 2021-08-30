@@ -9,13 +9,17 @@ const api =
       return next(action);
     }
 
-    next(action); // to dispatch this ("api call began") action
+    const { url, method, data, onStart, onSuccess, onError } = action.payload;
 
-    const { url, method, data, onSuccess, onError } = action.payload;
+    if (onStart) {
+      dispatch({ type: onStart });
+    }
+
+    next(action); // to dispatch this ("api call began") action
 
     try {
       const response = await axios.request({
-        baseURL: 'http://localhost:9001/api',
+        baseURL: 'http://localhost:9002/api',
         url,
         method,
         data,
@@ -26,9 +30,9 @@ const api =
         dispatch({ type: onSuccess, payload: response.data }); // specific
       }
     } catch (error) {
-      dispatch(actions.apiCallFailure(error)); // general
+      dispatch(actions.apiCallFailure(error.message)); // general
       if (onError) {
-        dispatch({ type: onError, payload: error }); // specific
+        dispatch({ type: onError, payload: error.message }); // specific
       }
     }
   };
