@@ -46,10 +46,9 @@ const slice = createSlice({
 });
 
 export default slice.reducer;
-export const {
+const {
   bugAdded,
   bugResolved,
-  bugRemoved,
   bugAssigned,
   bugsReceived,
   bugsRequested,
