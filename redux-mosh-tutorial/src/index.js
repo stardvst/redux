@@ -1,5 +1,5 @@
 import configureAppStore from './store/configureStore';
-import { loadBugs } from './store/bugs';
+import { addBug, loadBugs } from './store/bugs';
 import { projectAdded } from './store/projects';
 
 const store = configureAppStore();
@@ -21,6 +21,8 @@ store.dispatch({
 
 store.dispatch(loadBugs());
 setTimeout(() => store.dispatch(loadBugs()), 2000);
+
+store.dispatch(addBug({ description: 'a' }));
 
 // store.dispatch(userAdded({ name: 'User1' }));
 // store.dispatch(userAdded({ name: 'User2' }));

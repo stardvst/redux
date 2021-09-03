@@ -2,8 +2,6 @@ import moment from 'moment';
 import { createSelector, createSlice } from '@reduxjs/toolkit';
 import { apiCallBegan } from './api';
 
-let lastId = 0;
-
 const slice = createSlice({
   name: 'bugs',
   initialState: {
@@ -13,11 +11,7 @@ const slice = createSlice({
   },
   reducers: {
     bugAdded: (bugs, action) => {
-      bugs.list.push({
-        id: ++lastId,
-        description: action.payload.description,
-        resolved: false,
-      });
+      bugs.list.push(action.payload);
     },
 
     bugResolved: (bugs, action) => {
@@ -64,6 +58,7 @@ export const {
 
 // action creators
 const url = '/bugs';
+
 export const loadBugs = () => (dispatch, getState) => {
   const { lastFetch } = getState().entities.bugs;
 
@@ -81,6 +76,14 @@ export const loadBugs = () => (dispatch, getState) => {
     })
   );
 };
+
+export const addBug = bug =>
+  apiCallBegan({
+    url,
+    method: 'post',
+    data: bug,
+    onSuccess: bugAdded.type,
+  });
 
 export const getUnresolvedBugs = createSelector(
   state => state.entities.bugs,
