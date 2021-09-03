@@ -5,7 +5,7 @@ const func =
     if (typeof action === 'function') {
       action(dispatch, getState);
     } else {
-      next(action);
+      return next(action);
     }
   };
 
